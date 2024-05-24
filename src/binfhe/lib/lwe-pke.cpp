@@ -45,6 +45,11 @@ NativeInteger LWEEncryptionScheme::RoundqQ(const NativeInteger& v, const NativeI
         .Mod(q);
 }
 
+LWEPrivateKey LWEEncryptionScheme::KeyGenBinary(usint size, const NativeInteger& modulus) const {
+    BinaryUniformGeneratorImpl<NativeVector> bug;
+    return std::make_shared<LWEPrivateKeyImpl>(LWEPrivateKeyImpl(bug.GenerateVector(size, modulus)));
+}
+
 LWEPrivateKey LWEEncryptionScheme::KeyGen(usint size, const NativeInteger& modulus) const {
     TernaryUniformGeneratorImpl<NativeVector> tug;
     return std::make_shared<LWEPrivateKeyImpl>(tug.GenerateVector(size, modulus));

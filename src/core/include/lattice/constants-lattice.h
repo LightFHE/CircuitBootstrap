@@ -45,7 +45,7 @@ enum SecretKeyDist {
     GAUSSIAN        = 0,
     UNIFORM_TERNARY = 1,  // Default value, all schemes support this key distribution
     SPARSE_TERNARY  = 2,
-    // BINARY = 3, // Future implementation
+    UNIFORM_BINARY = 3, 
 };
 SecretKeyDist convertToSecretKeyDist(const std::string& str);
 SecretKeyDist convertToSecretKeyDist(uint32_t num);

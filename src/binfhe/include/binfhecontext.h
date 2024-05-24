@@ -64,6 +64,7 @@ struct BinFHEContextParams {
 
     // for Ring GSW + LWE parameters
     usint gadgetBase;  // gadget base used in the bootstrapping
+    usint digitsBase;  // approximate gadget length used in the bootstrapping
     usint baseRK;      // base for the refreshing key
 
     // number of Automorphism keys for LMKCDEY (> 0)
@@ -100,7 +101,7 @@ public:
    * @return creates the cryptocontext
    */
     void GenerateBinFHEContext(uint32_t n, uint32_t N, const NativeInteger& q, const NativeInteger& Q, double std,
-                               uint32_t baseKS, uint32_t baseG, uint32_t baseR, SecretKeyDist keyDist = UNIFORM_TERNARY,
+                               uint32_t baseKS, uint32_t baseG, uint32_t baseR, uint32_t digitsBase, SecretKeyDist keyDist = UNIFORM_TERNARY,
                                BINFHE_METHOD method = GINX, uint32_t numAutoKeys = 10);
 
     /**

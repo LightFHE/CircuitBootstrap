@@ -73,6 +73,13 @@ void RingGSWCryptoParams::PreCompute(bool signEval) {
         }
     }
 
+    m_AGpower.reserve(m_digitsGA);
+    NativeInteger vTemp = NativeInteger(static_cast<BasicInteger>(std::ceil(m_Q.ConvertToDouble() / m_Gpower[m_digitsGA].ConvertToDouble())));
+    for (uint32_t i = 0; i < m_digitsGA; ++i) {
+        m_AGpower.push_back(vTemp);
+        vTemp = vTemp.ModMulFast(NativeInteger(m_baseG), m_Q);
+    }
+
     // Sets the gate constants for supported binary operations
     m_gateConst = {
         NativeInteger(5) * (m_q >> 3),   // OR

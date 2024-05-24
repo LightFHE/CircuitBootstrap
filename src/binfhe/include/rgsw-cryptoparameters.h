@@ -70,18 +70,20 @@ public:
    * @param baseR the base for the refreshing key
    * @param method bootstrapping method (DM or CGGI or LMKCDEY)
    * @param std standar deviation
+   * @param digitsGA approximate decomposition length
    * @param keyDist secret key distribution
    * @param signEval flag if sign evaluation is needed
    * @param numAutoKeys number of automorphism keys in LMKCDEY bootstrapping
    */
     explicit RingGSWCryptoParams(uint32_t N, NativeInteger Q, NativeInteger q, uint32_t baseG, uint32_t baseR,
-                                 BINFHE_METHOD method, double std, SecretKeyDist keyDist = UNIFORM_TERNARY,
+                                 BINFHE_METHOD method, double std, uint32_t digitsGA = 0, SecretKeyDist keyDist = UNIFORM_TERNARY,
                                  bool signEval = false, uint32_t numAutoKeys = 10)
         : m_Q(Q),
           m_q(q),
           m_N(N),
           m_baseG(baseG),
           m_baseR(baseR),
+          m_digitsGA(digitsGA),
           m_polyParams{std::make_shared<ILNativeParams>(2 * N, Q)},
           m_method(method),
           m_keyDist(keyDist),
@@ -121,6 +123,10 @@ public:
         return m_digitsG;
     }
 
+    uint32_t GetDigitsGA() const {
+        return m_digitsGA;
+    }
+
     uint32_t GetBaseR() const {
         return m_baseR;
     }
@@ -139,6 +145,10 @@ public:
 
     const std::vector<NativeInteger>& GetGPower() const {
         return m_Gpower;
+    }
+
+    const std::vector<NativeInteger>& GetAGPower() const {
+        return m_AGpower;
     }
 
     const std::vector<int32_t>& GetLogGen() const {
@@ -245,6 +255,9 @@ private:
     // base used for the refreshing key (used only for DM bootstrapping)
     uint32_t m_baseR{};
 
+    // number of digits in approximate decomposing integers mod Q
+    uint32_t m_digitsGA{};
+
     // number of digits in decomposing integers mod Q
     uint32_t m_digitsG{};
 
@@ -267,6 +280,9 @@ private:
 
     // A map of vectors of powers of baseG for sign evaluation
     std::map<uint32_t, std::vector<NativeInteger>> m_Gpower_map;
+
+    // A vector of base of approximate decomposition
+    std::vector<NativeInteger> m_AGpower;
 
     // Parameters for polynomials in RingGSW/RingLWE
     std::shared_ptr<ILNativeParams> m_polyParams;

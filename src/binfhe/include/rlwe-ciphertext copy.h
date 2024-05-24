@@ -56,7 +56,7 @@ using RLWECiphertext      = std::shared_ptr<RLWECiphertextImpl>;
 using ConstRLWECiphertext = const std::shared_ptr<const RLWECiphertextImpl>;
 
 /**
- * @brief Class that stores a RingGSW ciphertext; a two-dimensional vector of
+ * @brief Class that stores a RingLWE ciphertext; a two-dimensional vector of
  * ring elements
  */
 class RLWECiphertextImpl : public Serializable {
@@ -108,8 +108,8 @@ public:
     template <class Archive>
     void load(Archive& ar, std::uint32_t const version) {
         if (version > SerializedVersion()) {
-            OPENFHE_THROW("serialized object version " + std::to_string(version) +
-                          " is from a later version of the library");
+            OPENFHE_THROW(deserialize_error, "serialized object version " + std::to_string(version) +
+                                                 " is from a later version of the library");
         }
         ar(::cereal::make_nvp("elements", m_elements));
     }
