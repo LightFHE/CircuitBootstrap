@@ -1,3 +1,4 @@
+//Using external product to test the correctness of circuit bootstrapping
 #include "cirbtscontext.h"
 #include "rlwe-ske.h"
 
@@ -6,7 +7,7 @@
 using namespace lbcrypto;
 
 int main(){
-    int loop = 100;
+    int loop = 1000;
     double time = 0;
     for (int l = 0; l < loop; l++){
         //Generate context of circuit bootstrapping
@@ -41,6 +42,7 @@ int main(){
         end = std::chrono::system_clock::now();
 
         double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        //std::cout << elapsed << std::endl;
         time += elapsed;
 
         //RLWE and GSW external product

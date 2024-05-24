@@ -1,3 +1,5 @@
+//Using decryption of rgsw to test the correctness of circuit bootstrapping
+//The correctness of parameter set 'STD128_CircuitBootstrap_CMUX_1' can only be verified in this way.
 #include "cirbtscontext.h"
 #include "rlwe-ske.h"
 
@@ -7,12 +9,12 @@ using namespace lbcrypto;
 
 int main(){
 
-    int loop = 100;
+    int loop = 1000;
     double time = 0;
     for (int l = 0; l < loop; l++){
         //Generate context of circuit bootstrapping
         auto cc = CirBTSContext();
-        cc.GenerateCirBTSContext(STD128_CircuitBootstrap_CMUX_4, GINX);
+        cc.GenerateCirBTSContext(STD128_CircuitBootstrap_CMUX_1, GINX);
         auto sk = cc.KeyGen();//level 0 secret key
         auto sk2 = cc.RLWEKeyGen();//level 2 secret key
 
@@ -31,6 +33,7 @@ int main(){
         end = std::chrono::system_clock::now();
 
         double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        //std::cout << elapsed << std::endl;
         time += elapsed;
 
         //Verify if ct_rgsw is the ciphertext of 1  
