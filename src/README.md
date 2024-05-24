@@ -1,1 +1,1 @@
-We add circuit bootstrapping scheme and external product(circuit evaluation) in binFHE.
+We add circuit bootstrapping scheme based GINX.

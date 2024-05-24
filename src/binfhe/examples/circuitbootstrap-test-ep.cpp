@@ -6,35 +6,38 @@
 
 using namespace lbcrypto;
 
-int main(){
-    int loop = 1000;
+int main() {
+    int loop    = 1000;
     double time = 0;
-    for (int l = 0; l < loop; l++){
-        //Generate context of circuit bootstrapping
-        auto cc = CirBTSContext();
-        cc.GenerateCirBTSContext(STD128_CircuitBootstrap_CMUX_2, GINX);
-        auto sk = cc.KeyGen();//level 0 secret key
-        auto sk2 = cc.RLWEKeyGen();//level 2 secret key
 
-        //Generate RLWE ciphertext of m1
-        auto rlweParams = cc.GetParams()->GetRLWEParams();
-        auto polyParams = rlweParams->GetPolyParams();
-        auto N = polyParams->GetRingDimension();
-        auto Q = polyParams->GetModulus();
-        auto basecc = cc.GetParams()->GetRingGSWParams2()->GetBaseG();
-        auto digitscc = cc.GetParams()->GetDigitsCC();
-    
-        BinaryUniformGeneratorImpl<NativeVector> bug;
-        NativePoly m1p(bug, polyParams, COEFFICIENT);
+    //Generate context of circuit bootstrapping
+    auto cc = CirBTSContext();
+    cc.GenerateCirBTSContext(STD128_CircuitBootstrap_CMUX_2, GINX);
+    auto sk  = cc.KeyGen();      //level 0 secret key
+    auto sk2 = cc.RLWEKeyGen();  //level 2 secret key
 
-        auto rlwecontext = RLWEEncryptionScheme();
-        auto ct1 = rlwecontext.Encrypt(rlweParams, sk2, m1p, 2, Q);
+    //Generate RLWE ciphertext of m1
+    auto rlweParams = cc.GetParams()->GetRLWEParams();
+    auto polyParams = rlweParams->GetPolyParams();
+    auto N          = polyParams->GetRingDimension();
+    auto Q          = polyParams->GetModulus();
+    auto basecc     = cc.GetParams()->GetRingGSWParams2()->GetBaseG();
+    auto digitscc   = cc.GetParams()->GetDigitsCC();
 
-        //Circuit bootstrapping of LWE(1)
-        auto ct2 = cc.Encrypt(sk, 1);
-        cc.CirBTKeyGen(sk, sk2);
+    BinaryUniformGeneratorImpl<NativeVector> bug;
+    NativePoly m1p(bug, polyParams, COEFFICIENT);
 
-        std::chrono::system_clock::time_point start, end;
+    auto rlwecontext = RLWEEncryptionScheme();
+    auto ct1         = rlwecontext.Encrypt(rlweParams, sk2, m1p, 2, Q);
+
+    //Circuit bootstrapping of LWE(1)
+    auto ct2 = cc.Encrypt(sk, 1);
+    //Generate circuit bootstrapping key
+    cc.CirBTKeyGen(sk, sk2);
+
+    std::chrono::system_clock::time_point start, end;
+
+    for (int l = 0; l < loop; l++) {
         start = std::chrono::system_clock::now();
 
         auto ct_gsw = cc.CircuitBootstrapping(ct2);
@@ -53,11 +56,11 @@ int main(){
 
 #pragma omp parallel for num_threads(OpenFHEParallelControls.GetThreadLimit(2 * digitscc))
         for (uint32_t i = 0; i < (2 * digitscc); ++i)
-            dct1[i].SetFormat(Format::EVALUATION);     
+            dct1[i].SetFormat(Format::EVALUATION);
 
         std::vector<NativePoly> ct_cc(2, NativePoly(polyParams, EVALUATION, true));
 
-        for (uint32_t i = 0; i < (2 * digitscc); ++i){
+        for (uint32_t i = 0; i < (2 * digitscc); ++i) {
             ct_cc[0] += dct1[i] * ct_gsw->GetElements()[i][0];
             ct_cc[1] += dct1[i] * ct_gsw->GetElements()[i][1];
         }
@@ -67,14 +70,14 @@ int main(){
         NativePoly m(polyParams, COEFFICIENT, false);
         rlwecontext.Decrypt(rlweParams, sk2, std::make_shared<RLWECiphertextImpl>(ct_c), &m, 2);
 
-        for (uint32_t i = 0; i < N; i++){
-            if (m[i].ConvertToInt() != m1p[i].ConvertToInt()){
-                std::cerr << "Error: Circuit bootstrapping failure..." <<std::endl;
+        for (uint32_t i = 0; i < N; i++) {
+            if (m[i].ConvertToInt() != m1p[i].ConvertToInt()) {
+                std::cerr << "Error: Circuit bootstrapping failure..." << std::endl;
                 return 1;
             }
         }
     }
     std::cout << "Circuit bootstrapping and external product are successful!" << std::endl;
-    std::cout << "电路自举时间为：" << time/loop << "ms" << std::endl; 
+    std::cout << "The time of circuit bootstrapping：" << time / loop << "ms" << std::endl;
     return 0;
 }

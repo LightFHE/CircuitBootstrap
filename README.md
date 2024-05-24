@@ -32,14 +32,14 @@ If your operating system is Windows, please refer to the following:
 ## Code Examples
 
 As circuit bootstrapping, we recommend looking at the code of the following examples:
-   1. Circuit bootstrapping:
-       1. [Code Example for circuit bootstrapping](src/binfhe/examples/circuitbootstrap-test-rgsw.cpp)
+   1. Circuit bootstrapping based 'GINX':
+       1. [Code Example for testing circuit bootstrapping correctness using decryption of RGSW](src/binfhe/examples/circuitbootstrap-test-rgsw.cpp)
 
           Test this example you can execute:
           ```
           ./bin/examples/binfhe/circuitbootstrap-test-rgsw
           ```
-       1. [Code Example for circuit bootstrapping and leveled computation(external product)](src/binfhe/examples/circuitbootstrap-test-ep.cpp)
+       1. [Code Example for testing circuit bootstrapping correctness using external product between RGSW and RLWE](src/binfhe/examples/circuitbootstrap-test-ep.cpp)
 
             Test this example you can execute:
             ```
