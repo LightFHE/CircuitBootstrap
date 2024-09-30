@@ -8,10 +8,9 @@ void CirBTSContext::GenerateCirBTSContext(CirBTS_PARAMSET set, BINFHE_METHOD met
 
     const std::unordered_map<CirBTS_PARAMSET, CirBTSContextParams> CircuitParamsMap({
             //                          numberBits|cyclOrder|latticeParam|  mod|   stdDev| BaseEP|  DigitsEP| BaseHT| DigitsHT| BaseSS| DigitsSS|BaseCC| DigitsCC|keyDist0|keyDist2 
-        { STD128_CircuitBootstrap_CMUX_1, {54,      4096,      571,        1024,  STD_DEV,  1 << 17,   2,    1 << 17,   2,    1 << 28,    1,    1 << 1,  8,   UNIFORM_BINARY, UNIFORM_BINARY} },
-        { STD128_CircuitBootstrap_CMUX_2, {54,      4096,      571,        1024,  STD_DEV,  1 << 13,   3,    1 << 17,   2,    1 << 28,    1,    1 << 3,  4,   UNIFORM_BINARY, UNIFORM_BINARY} },
-        { STD128_CircuitBootstrap_CMUX_3, {54,      4096,      571,        1024,  STD_DEV,  1 << 13,   3,    1 << 17,   2,    1 << 28,    1,    1 << 2,  8,   UNIFORM_BINARY, UNIFORM_BINARY} },
-        { STD128_CircuitBootstrap_CMUX_4, {54,      4096,      571,        1024,  STD_DEV,  1 << 10,   4,    1 << 13,   3,    1 << 28,    1,    1 << 2,  8,   UNIFORM_BINARY, UNIFORM_BINARY} },
+        { STD128_CircuitBootstrap_CMUX_1, {54,      4096,      571,        1024,  STD_DEV,  1 << 26,   1,    1 << 13,   3,    1 << 28,    1,    1 << 3,  4,   UNIFORM_BINARY, UNIFORM_BINARY} },
+        { STD128_CircuitBootstrap_CMUX_2, {54,      4096,      571,        1024,  STD_DEV,  1 << 17,   2,    1 << 13,   3,    1 << 19,    2,    1 << 4,  4,   UNIFORM_BINARY, UNIFORM_BINARY} },
+        { STD128_CircuitBootstrap_CMUX_3, {54,      4096,      571,        1024,  STD_DEV,  1 << 17,   2,    1 << 8,   2,    1 << 19,    2,    1 << 5,  4,   UNIFORM_BINARY, UNIFORM_BINARY} },
     });
 
     auto search = CircuitParamsMap.find(set);

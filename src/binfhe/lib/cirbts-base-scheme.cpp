@@ -28,14 +28,17 @@ RGSWCiphertext CirBTSScheme::CircuitBootstrap(const std::shared_ptr<CirBTSCrypto
     auto polyparams = params->GetRingGSWParams1()->GetPolyParams();
 
     NativeInteger N_inv = NativeInteger(N).ModInverse(Q);
-    auto LUT = N_inv * params->GetLUT();
+    auto LUT = params->GetLUT();
     //std::chrono::system_clock::time_point start, end;
     //MV-FBS
     //start = std::chrono::system_clock::now();
+    //auto LUT = params->GetLUT();
     auto acc{BootstrapManyLUT(params, ek.RFkey, ct, LUT, bitwidth)};
     //end = std::chrono::system_clock::now();
     //double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     //std::cout << "MV-FBS的时间为：" << elapsed << std::endl;
+    acc->GetElements()[0] = acc->GetElements()[0].Times(N_inv);
+    acc->GetElements()[1] = acc->GetElements()[1].Times(N_inv);
     acc->GetElements()[1].SetFormat(COEFFICIENT);
     //Add B^(i)/(2N)
     for(uint32_t i = 0; i < numLUT; i++){
