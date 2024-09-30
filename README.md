@@ -3,7 +3,7 @@ Circuit bootstrapping based OpenFHE
 
 The code is modern C++ using OpenFHE, we implemented circuit bootstrapping(WWL+24) scheme for converting high-noise LWE ciphertext into its corresponding RGSW form with low-noise(https://eprint.iacr.org/2024/323).
 
-Parameters_gen.py is a circuit bootstrap parameter generator developed using Python, making our work accessible to both researchers and practitioners.
+parameters_gen.py is a circuit bootstrap parameter generator developed using Python, making our work accessible to both researchers and practitioners.
 
 ## Installation
 
